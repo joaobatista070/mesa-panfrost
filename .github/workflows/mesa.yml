@@ -20,8 +20,19 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt update
-          sudo apt install -y glslang-tools golang-lukechampine-blake3-dev librust-blake3-dev b3sum libxrandr-dev libxxf86vm-dev libxcb-*-dev libx11-xcb-dev libxfixes-dev libdrm-dev libx11-dev
-          pip3 install meson mako ninja
+          sudo apt install -y \
+            glslang-tools \
+            libxrandr-dev \
+            libxxf86vm-dev \
+            libxcb-*-dev \
+            libx11-xcb-dev \
+            libxfixes-dev \
+            libdrm-dev \
+            libx11-dev \
+            python3-pip \
+            meson \
+            ninja-build \
+            git
 
       - name: Set up Android NDK
         run: |
@@ -53,7 +64,9 @@ jobs:
 
       - name: Build Unified Mesa Project
         run: |
-          cp android-* .
+          git clone --depth 1 https://github.com/Mateus2022/unified-mesa-project.git
+          cd unified-mesa-project
+          cp ../android-* .
           envsubst <android-${{matrix.arch}} >build-crossfile
           meson setup "build-android" \
             --prefix=/tmp/pan \
